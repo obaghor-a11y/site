@@ -1,78 +1,106 @@
-// Cart functionality
-let cart = [];
-let cartCount = 0;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuxTime Watches & Accessories</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">LuxTime</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#products">Products</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="cart-icon" onclick="toggleCart()">🛒 <span id="cart-count">0</span></div>
+        </nav>
+    </header>
 
-function addToCart(button) {
-    const productCard = button.closest('.product-card');
-    const productData = JSON.parse(productCard.dataset.product);
-    
-    cart.push(productData);
-    cartCount++;
-    updateCartUI();
-    
-    // Visual feedback
-    button.textContent = 'Added!';
-    setTimeout(() => { button.textContent = 'Add to Cart'; }, 1000);
-}
+    <!-- Hero Section (Landing) -->
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>Timeless Elegance</h1>
+            <p>Discover our curated collection of luxury watches and accessories, crafted for the discerning individual.</p>
+            <a href="#products" class="cta-btn">Explore Collection</a>
+        </div>
+        <img src="https://source.unsplash.com/1200x800/?luxury-watch" alt="Luxury Watch Hero" class="hero-image">
+    </section>
 
-function updateCartUI() {
-    document.getElementById('cart-count').textContent = cartCount;
-    document.getElementById('cart-total-items').textContent = cartCount;
-    
-    const cartItems = document.getElementById('cart-items');
-    cartItems.innerHTML = '';
-    let total = 0;
-    
-    cart.forEach((item, index) => {
-        const cartItem = document.createElement('div');
-        cartItem.classList.add('cart-item');
-        cartItem.innerHTML = `
-            <span>${item.name} - ${item.price}</span>
-            <button onclick="removeFromCart(${index})">Remove</button>
-        `;
-        cartItems.appendChild(cartItem);
-        total += parseInt(item.price.replace('$', '').replace(',', ''));
-    });
-    
-    document.getElementById('cart-total').textContent = `Total: $${total.toLocaleString()}`;
-}
+    <!-- Featured Products -->
+    <section id="products" class="products">
+        <h2>Featured Collection</h2>
+        <div class="product-grid">
+            <!-- Product 1: Watch -->
+            <div class="product-card" data-product='{"name":"Gold Chronograph Watch","price":"$2,500","image":"https://source.unsplash.com/400x400/?gold-watch","desc":"Swiss-made precision with 18k gold case."}'>
+                <img src="https://source.unsplash.com/400x400/?gold-watch" alt="Gold Chronograph Watch">
+                <h3>Gold Chronograph Watch</h3>
+                <p class="price">$2,500</p>
+                <button onclick="addToCart(this)">Add to Cart</button>
+            </div>
+            <!-- Product 2: Leather Bracelet -->
+            <div class="product-card" data-product='{"name":"Leather Cuff Bracelet","price":"$450","image":"https://source.unsplash.com/400x400/?leather-bracelet","desc":"Handcrafted Italian leather with sterling silver clasp."}'>
+                <img src="https://source.unsplash.com/400x400/?leather-bracelet" alt="Leather Cuff Bracelet">
+                <h3>Leather Cuff Bracelet</h3>
+                <p class="price">$450</p>
+                <button onclick="addToCart(this)">Add to Cart</button>
+            </div>
+            <!-- Product 3: Diamond Watch -->
+            <div class="product-card" data-product='{"name":"Diamond Encrusted Watch","price":"$15,000","image":"https://source.unsplash.com/400x400/?diamond-watch","desc":"Elegant timepiece with genuine diamonds."}'>
+                <img src="https://source.unsplash.com/400x400/?diamond-watch" alt="Diamond Encrusted Watch">
+                <h3>Diamond Encrusted Watch</h3>
+                <p class="price">$15,000</p>
+                <button onclick="addToCart(this)">Add to Cart</button>
+            </div>
+            <!-- Product 4: Sunglasses -->
+            <div class="product-card" data-product='{"name":"Aviator Sunglasses","price":"$800","image":"https://source.unsplash.com/400x400/?luxury-sunglasses","desc":"Timeless aviator style with gold frames."}'>
+                <img src="https://source.unsplash.com/400x400/?luxury-sunglasses" alt="Aviator Sunglasses">
+                <h3>Aviator Sunglasses</h3>
+                <p class="price">$800</p>
+                <button onclick="addToCart(this)">Add to Cart</button>
+            </div>
+            <!-- Add more products as needed -->
+        </div>
+    </section>
 
-function removeFromCart(index) {
-    cart.splice(index, 1);
-    cartCount--;
-    updateCartUI();
-}
+    <!-- About Section -->
+    <section id="about" class="about">
+        <h2>About LuxTime</h2>
+        <p>Founded in 2020, LuxTime specializes in high-end watches and accessories from renowned artisans worldwide. Our commitment to quality ensures every piece is a statement of sophistication.</p>
+        <img src="https://source.unsplash.com/800x400/?luxury-store" alt="LuxTime Store" class="about-image">
+    </section>
 
-function toggleCart() {
-    const sidebar = document.getElementById('cart-sidebar');
-    sidebar.classList.toggle('hidden');
-}
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <h2>Contact Us</h2>
+        <p>Email: info@luxtime.com | Phone: +1 (555) 123-4567</p>
+        <form class="contact-form">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
 
-function checkout() {
-    if (cart.length === 0) {
-        alert('Your cart is empty!');
-        return;
-    }
-    alert('Proceeding to checkout... (Integrate with payment gateway here)');
-    cart = [];
-    cartCount = 0;
-    updateCartUI();
-    toggleCart();
-}
+    <!-- Cart Sidebar -->
+    <div id="cart-sidebar" class="cart-sidebar hidden">
+        <h3>Shopping Cart (<span id="cart-total-items">0</span>)</h3>
+        <div id="cart-items"></div>
+        <p id="cart-total">Total: $0</p>
+        <button onclick="checkout()">Checkout</button>
+        <button onclick="toggleCart()">Close</button>
+    </div>
 
-// Smooth scrolling for nav links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        document.querySelector(this.getAttribute('href')).scrollIntoView({
-            behavior: 'smooth'
-        });
-    });
-});
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2023 LuxTime. All rights reserved. | Privacy Policy | Terms of Service</p>
+    </footer>
 
-// Contact form submission (demo)
-document.querySelector('.contact-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    alert('Message sent! (Integrate with backend here)');
-    this.reset();
-});
+    <script src="script.js"></script>
+</body>
+</html>
